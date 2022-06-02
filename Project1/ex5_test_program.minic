@@ -1,0 +1,37 @@
+int sqRoots(int x, int y, int z){
+	int result;
+	result = y*y - 4*x*z;
+	if (result < 0){
+		out "No real roots\n";
+	} else {
+		if (result == 0)
+			out "One root\n";
+		else
+			out "Two roots\n";
+	}
+	return result;
+}
+int q, w, t, u, o;
+int main(){
+	int a, b, c, d, i;
+	in a;
+	in b;
+	in c;
+	while (a < 2)
+	{
+		a = b + 1;
+		b = a + 5;
+	}
+	for (i = 0; i < 666; i = i + 1){
+		a = a + 13;
+	}
+
+	switch (a){
+		case 0: b = 0;
+		case 1: b = 563;
+		default: b = 6;
+	}
+
+	d = sqRoots(a, b + 2, sqRoots(1, 2, 3));
+	return 0;
+}

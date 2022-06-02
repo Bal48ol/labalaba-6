@@ -1,0 +1,20 @@
+int func(int x, int y, int z)
+{
+	int f, e;
+}
+
+int point;
+
+int main(){
+	int a = 5;
+	int b = 78;
+
+	int result;
+
+	result = func(func(1, a+b, 0), b, func(a, b, a));
+
+	out "-1";
+	out "Hello";
+	out "World";
+	out "ht5";
+}
