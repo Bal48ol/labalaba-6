@@ -1,8 +1,3 @@
-/*
-	Copyright © 2022 TverSU. All rights reserved.
-	Author: Ischenko Andrey
-*/
-
 #include <algorithm>
 #include <iomanip>
 #include <exception>
@@ -21,9 +16,9 @@ const TSrec& SymbolTable::operator[](const int index) const {
 
 
 int SymbolTable::getM(Scope scope) const {
-	int n = _records[scope]._len; // количество аргументов функции
-	int m = 0;                    // Искомое M - количество локальных и временных переменных
-	int vars = 0;                 // количество переменных в scope
+	int n = _records[scope]._len; // ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г Г°ГЈГіГ¬ГҐГ­ГІГ®Гў ГґГіГ­ГЄГ¶ГЁГЁ
+	int m = 0;                    // Г€Г±ГЄГ®Г¬Г®ГҐ M - ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г«Г®ГЄГ Г«ГјГ­Г»Гµ ГЁ ГўГ°ГҐГ¬ГҐГ­Г­Г»Гµ ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»Гµ
+	int vars = 0;                 // ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»Гµ Гў scope
 	for (auto& record : _records) {
 		if (record._scope == scope)
 			++vars;
