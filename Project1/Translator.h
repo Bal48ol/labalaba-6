@@ -1,8 +1,3 @@
-/*
-	Copyright © 2022 TverSU. All rights reserved.
-	Author: Ischenko Andrey
-*/
-
 #pragma once
 #include <map>
 #include <string>
