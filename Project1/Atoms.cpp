@@ -1,8 +1,3 @@
-/*
-	Copyright © 2022 TverSU. All rights reserved.
-	Author: Ischenko Andrey
-*/
-
 #include <sstream>
 #include <string>
 #include "Atoms.h"
@@ -146,7 +141,7 @@ void UnaryOpAtom::generate(std::ostream& stream) const {
 	}
 	else {
 		std::ostringstream err_msg;
-		err_msg << "Íåèçâåñòíûé ÀÒÎÌ â UnaryOpAtom : [";
+		err_msg << "ÃÃ¥Ã¨Ã§Ã¢Ã¥Ã±Ã²Ã­Ã»Ã© Ã€Ã’ÃŽÃŒ Ã¢ UnaryOpAtom : [";
 		err_msg << _name;
 		err_msg << "] .";
 		throw std::exception(err_msg.str().c_str());
@@ -236,7 +231,7 @@ void OutAtom::generate(std::ostream& stream) const {
 				stream << '\t' << "OUT 1" << '\n';
 			}
 			else
-				throw std::exception("âûâîä íå ñòðîêè è íå ïåðåìåííîé.");
+				throw std::exception("Ã¢Ã»Ã¢Ã®Ã¤ Ã­Ã¥ Ã±Ã²Ã°Ã®ÃªÃ¨ Ã¨ Ã­Ã¥ Ã¯Ã¥Ã°Ã¥Ã¬Ã¥Ã­Ã­Ã®Ã©.");
 		}
 	}
 }
@@ -410,7 +405,7 @@ void SimpleConditionalJumpAtom::generateOperation(std::ostream& stream) const {
 		stream << '\t' << "JM " << _label->toString() << '\n';
 	else {
 		std::ostringstream err_msg;
-		err_msg << "Íåèçâåñòíîå óñëîâèå â SimpleConditionalJumpAtom : [ ";
+		err_msg << "ÃÃ¥Ã¨Ã§Ã¢Ã¥Ã±Ã²Ã­Ã®Ã¥ Ã³Ã±Ã«Ã®Ã¢Ã¨Ã¥ Ã¢ SimpleConditionalJumpAtom : [ ";
 		err_msg << _condition;
 		err_msg << " ] .";
 		throw std::exception(err_msg.str().c_str());
