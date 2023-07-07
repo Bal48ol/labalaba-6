@@ -1,8 +1,3 @@
-/*
-	Copyright © 2022 TverSU. All rights reserved.
-	Author: Ischenko Andrey
-*/
-
 #include "Token.h"
 
 Token::Token(LexemType type) {
