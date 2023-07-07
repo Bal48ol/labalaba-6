@@ -1,8 +1,3 @@
-/*
-	Copyright © 2022 TverSU. All rights reserved.
-	Author: Ischenko Andrey
-*/
-
 #include <exception>
 #include <iomanip>
 #include <memory>
@@ -26,8 +21,8 @@ void Translator::printAtoms(std::ostream& stream) {
 }
 
 void Translator::generateAtom(std::unique_ptr<Atom> atom, Scope scope) {
-	// Положить в список атомов
-	// Ничего больше порождать не надо
+	// ГЏГ®Г«Г®Г¦ГЁГІГј Гў Г±ГЇГЁГ±Г®ГЄ Г ГІГ®Г¬Г®Гў
+	// ГЌГЁГ·ГҐГЈГ® ГЎГ®Г«ГјГёГҐ ГЇГ®Г°Г®Г¦Г¤Г ГІГј Г­ГҐ Г­Г Г¤Г®
 	_atoms[scope].push_back(std::move(atom));
 }
 
@@ -79,7 +74,7 @@ std::shared_ptr<RValue> Translator::E1(Scope scope) {
 		auto q = E(scope);
 		lexCheck();
 		if (_currentToken.type() != LexemType::rpar)
-			syntaxError(" нет закрывающей круглой скобки.");
+			syntaxError(" Г­ГҐГІ Г§Г ГЄГ°Г»ГўГ ГѕГ№ГҐГ© ГЄГ°ГіГЈГ«Г®Г© Г±ГЄГ®ГЎГЄГЁ.");
 		_currentToken = _scanner.getNextToken();
 		return q;
 	}
@@ -87,11 +82,11 @@ std::shared_ptr<RValue> Translator::E1(Scope scope) {
 	if (_currentToken.type() == LexemType::opinc) {
 		_currentToken = _scanner.getNextToken();
 		lexCheck();
-		if (_currentToken.type() != LexemType::id) syntaxError(" ожидалась переменная.");
+		if (_currentToken.type() != LexemType::id) syntaxError(" Г®Г¦ГЁГ¤Г Г«Г Г±Гј ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г Гї.");
 		auto q = _symbolTable.checkVar(scope, _currentToken.str());
 
 		if (q == nullptr)
-			syntaxError("Использование необъявленной переменной");
+			syntaxError("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Г­ГҐГ®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 
 		_currentToken = _scanner.getNextToken();
 		generateAtom(std::make_unique<SimpleBinaryOpAtom>("ADD", std::dynamic_pointer_cast<RValue>(q), one, q), scope);
@@ -107,18 +102,18 @@ std::shared_ptr<RValue> Translator::E1(Scope scope) {
 	if (_currentToken.type() == LexemType::opdec) {
 		_currentToken = _scanner.getNextToken();
 		lexCheck();
-		if (_currentToken.type() != LexemType::id) syntaxError(" ожидалась переменная.");
+		if (_currentToken.type() != LexemType::id) syntaxError(" Г®Г¦ГЁГ¤Г Г«Г Г±Гј ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г Гї.");
 		auto q = _symbolTable.checkVar(scope, _currentToken.str());
 
 		if (q == nullptr)
-			syntaxError("Использование необъявленной переменной");
+			syntaxError("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Г­ГҐГ®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 
 		_currentToken = _scanner.getNextToken();
 		generateAtom(std::make_unique<SimpleBinaryOpAtom>("SUB", std::dynamic_pointer_cast<RValue>(q), one, q), scope);
 		return q;
 	}
 
-	syntaxError(" ожидался операнд.");
+	syntaxError(" Г®Г¦ГЁГ¤Г Г«Г±Гї Г®ГЇГҐГ°Г Г­Г¤.");
 }
 
 std::shared_ptr<RValue> Translator::E1_(std::string name, Scope scope) {
@@ -128,7 +123,7 @@ std::shared_ptr<RValue> Translator::E1_(std::string name, Scope scope) {
 		auto p = _symbolTable.checkVar(scope, name);
 
 		if (p == nullptr)
-			syntaxError("Использование необъявленной переменной");
+			syntaxError("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Г­ГҐГ®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 
 		auto r = _symbolTable.alloc(scope);
 		generateAtom(std::make_unique<UnaryOpAtom>("MOV", p, r), scope);
@@ -139,12 +134,12 @@ std::shared_ptr<RValue> Translator::E1_(std::string name, Scope scope) {
 		_currentToken = _scanner.getNextToken();
 		int count_args = ArgList(scope);
 		lexCheck();
-		if (_currentToken.type() != LexemType::rpar) syntaxError("Ожидалась закрывающая круглая скобка");
+		if (_currentToken.type() != LexemType::rpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 		_currentToken = _scanner.getNextToken();
 		auto s = _symbolTable.checkFunc(name, count_args);
 
 		if (s == nullptr)
-			syntaxError("Не найдена функция с именем <" + name + "> с количеством параметров " + std::to_string(count_args));
+			syntaxError("ГЌГҐ Г­Г Г©Г¤ГҐГ­Г  ГґГіГ­ГЄГ¶ГЁГї Г± ГЁГ¬ГҐГ­ГҐГ¬ <" + name + "> Г± ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ®Г¬ ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў " + std::to_string(count_args));
 
 		auto r = _symbolTable.alloc(scope);
 		generateAtom(std::make_unique<CallAtom>(s, r), scope);
@@ -156,7 +151,7 @@ std::shared_ptr<RValue> Translator::E1_(std::string name, Scope scope) {
 		auto p = _symbolTable.checkVar(scope, name);
 
 		if (p == nullptr)
-			syntaxError("Использование необъявленной переменной");
+			syntaxError("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Г­ГҐГ®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 
 		auto r = _symbolTable.alloc(scope);
 		generateAtom(std::make_unique<UnaryOpAtom>("MOV", p, r), scope);
@@ -167,7 +162,7 @@ std::shared_ptr<RValue> Translator::E1_(std::string name, Scope scope) {
 	auto p = _symbolTable.checkVar(scope, name);
 
 	if (p == nullptr)
-		syntaxError("Использование необъявленной переменной");
+		syntaxError("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Г­ГҐГ®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 
 	return p;
 }
@@ -312,7 +307,7 @@ SymbolTable::TableRecord::RecordType Translator::Type(Scope) {
 		_currentToken = _scanner.getNextToken();
 		return SymbolTable::TableRecord::RecordType::integer;
 	}
-	syntaxError("Ожидался тип");
+	syntaxError("ГЋГ¦ГЁГ¤Г Г«Г±Гї ГІГЁГЇ");
 }
 
 void Translator::DeclareStmt_(SymbolTable::TableRecord::RecordType type, std::string name, Scope scope) {
@@ -332,14 +327,14 @@ void Translator::DeclareStmt_(SymbolTable::TableRecord::RecordType type, std::st
 
 		lexCheck();
 
-		if (_currentToken.type() != LexemType::rpar) syntaxError("Ожидалась закрывающая круглая скобка");
+		if (_currentToken.type() != LexemType::rpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 		_currentToken = _scanner.getNextToken();
 
 		if (_currentToken.type() == LexemType::lbrace) {
 			_currentToken = _scanner.getNextToken();
 			StmtList(scope);
 			lexCheck();
-			if (_currentToken.type() != LexemType::rbrace) syntaxError("Ожидалась закрывающая фигурная скобка");
+			if (_currentToken.type() != LexemType::rbrace) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГґГЁГЈГіГ°Г­Г Гї Г±ГЄГ®ГЎГЄГ ");
 			_currentToken = _scanner.getNextToken();
 		}
 		auto zero = std::make_shared<NumberOperand>(0);
@@ -357,7 +352,7 @@ void Translator::DeclareStmt_(SymbolTable::TableRecord::RecordType type, std::st
 			DeclVarList_(type, scope);
 
 			lexCheck();
-			if (_currentToken.type() != LexemType::semicolon) syntaxError("Ожидалась точка с запятой");
+			if (_currentToken.type() != LexemType::semicolon) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј ГІГ®Г·ГЄГ  Г± Г§Г ГЇГїГІГ®Г©");
 			_currentToken = _scanner.getNextToken();
 		}
 	}
@@ -365,7 +360,7 @@ void Translator::DeclareStmt_(SymbolTable::TableRecord::RecordType type, std::st
 		_symbolTable.addVar(name, scope, type);
 		DeclVarList_(type, scope);
 		lexCheck();
-		if (_currentToken.type() != LexemType::semicolon) syntaxError("Ожидалась точка с запятой");
+		if (_currentToken.type() != LexemType::semicolon) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј ГІГ®Г·ГЄГ  Г± Г§Г ГЇГїГІГ®Г©");
 		_currentToken = _scanner.getNextToken();
 	}
 
@@ -378,7 +373,7 @@ void Translator::DeclVarList_(SymbolTable::TableRecord::RecordType type, Scope s
 		_currentToken = _scanner.getNextToken();
 
 		lexCheck();
-		if (_currentToken.type() != LexemType::id) syntaxError("Ожидалось название переменной");
+		if (_currentToken.type() != LexemType::id) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г®Г±Гј Г­Г Г§ГўГ Г­ГЁГҐ ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 
 		auto name = _currentToken.str();
 		_currentToken = _scanner.getNextToken();
@@ -425,7 +420,7 @@ void Translator::Stmt(Scope scope) {
 		StmtList(scope);
 
 		lexCheck();
-		if (_currentToken.type() != LexemType::rbrace) syntaxError("Ожидалась закрывающая фигурная скобка");
+		if (_currentToken.type() != LexemType::rbrace) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГґГЁГЈГіГ°Г­Г Гї Г±ГЄГ®ГЎГЄГ ");
 		_currentToken = _scanner.getNextToken();
 
 		return;
@@ -464,13 +459,13 @@ void Translator::Stmt(Scope scope) {
 		auto p = E(scope);
 		generateAtom(std::make_unique<RetAtom>(p), scope);
 
-		if (_currentToken.type() != LexemType::semicolon) syntaxError("Ожидалась точка с запятой");
+		if (_currentToken.type() != LexemType::semicolon) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј ГІГ®Г·ГЄГ  Г± Г§Г ГЇГїГІГ®Г©");
 		_currentToken = _scanner.getNextToken();
 
 		return;
 	}
 	
-	syntaxError("Что-то пошло не так");
+	syntaxError("Г—ГІГ®-ГІГ® ГЇГ®ГёГ«Г® Г­ГҐ ГІГ ГЄ");
 }
 
 int Translator::ParamList(Scope scope) {
@@ -480,7 +475,7 @@ int Translator::ParamList(Scope scope) {
 
 	auto type = Type(scope);
 	lexCheck();
-	if (_currentToken.type() != LexemType::id) syntaxError("Ожидалось имя параметра");
+	if (_currentToken.type() != LexemType::id) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г®Г±Гј ГЁГ¬Гї ГЇГ Г°Г Г¬ГҐГІГ°Г ");
 	std::string name = _currentToken.str();
 	_currentToken = _scanner.getNextToken();
 
@@ -493,14 +488,14 @@ int Translator::ParamList_(Scope scope) {
 	if (_currentToken.type() == LexemType::rpar) return 0;
 
 	lexCheck();
-	if (_currentToken.type() != LexemType::comma) syntaxError("Ожидалась закрывающая скобка или ещё один параметр");
+	if (_currentToken.type() != LexemType::comma) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї Г±ГЄГ®ГЎГЄГ  ГЁГ«ГЁ ГҐГ№Вё Г®Г¤ГЁГ­ ГЇГ Г°Г Г¬ГҐГІГ°");
 	_currentToken = _scanner.getNextToken();
 
 	bool is_const = IsConst(scope);
 
 	auto type = Type(scope);
 	lexCheck();
-	if (_currentToken.type() != LexemType::id) syntaxError("Ожидалось имя параметра");
+	if (_currentToken.type() != LexemType::id) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г®Г±Гј ГЁГ¬Гї ГЇГ Г°Г Г¬ГҐГІГ°Г ");
 	std::string name = _currentToken.str();
 	_currentToken = _scanner.getNextToken();
 
@@ -526,13 +521,13 @@ void Translator::AssignOrCallOp(Scope scope) {
 
 	lexCheck();
 	if (_currentToken.type() != LexemType::semicolon)
-		syntaxError("Ожидалась точка с запятой");
+		syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј ГІГ®Г·ГЄГ  Г± Г§Г ГЇГїГІГ®Г©");
 	_currentToken = _scanner.getNextToken();
 }
 
 void Translator::AssignOrCall(Scope scope) {
 	lexCheck();
-	if (_currentToken.type() != LexemType::id) syntaxError("Неизвестная ошибка");
+	if (_currentToken.type() != LexemType::id) syntaxError("ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ ");
 
 	std::string name = _currentToken.str();
 	_currentToken = _scanner.getNextToken();
@@ -547,13 +542,13 @@ void Translator::AssignOrCall_(Scope scope, std::string name) {
 		int n = ArgList(scope);
 
 		lexCheck();
-		if (_currentToken.type() != LexemType::rpar) syntaxError("Ожидалась закрывающая круглая скобка");
+		if (_currentToken.type() != LexemType::rpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 		_currentToken = _scanner.getNextToken();
 
 		auto q = _symbolTable.checkFunc(name, n);
 
 		if (q == nullptr)
-			syntaxError("Не найдена функция с именем <" + name + "> с количеством параметров " + std::to_string(n));
+			syntaxError("ГЌГҐ Г­Г Г©Г¤ГҐГ­Г  ГґГіГ­ГЄГ¶ГЁГї Г± ГЁГ¬ГҐГ­ГҐГ¬ <" + name + "> Г± ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ®Г¬ ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў " + std::to_string(n));
 
 		auto r = _symbolTable.alloc(scope);
 		generateAtom(std::make_unique<CallAtom>(q, r), scope);
@@ -564,16 +559,16 @@ void Translator::AssignOrCall_(Scope scope, std::string name) {
 		auto r = _symbolTable.checkVar(scope, name);
 
 		if (r == nullptr)
-			syntaxError("Использование необъявленной переменной");
+			syntaxError("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Г­ГҐГ®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 		if ((r->_symbolTable)->operator[](r->_index)._is_const) {
-			syntaxError("Нельзя изменять константную переменную.");
+			syntaxError("ГЌГҐГ«ГјГ§Гї ГЁГ§Г¬ГҐГ­ГїГІГј ГЄГ®Г­Г±ГІГ Г­ГІГ­ГіГѕ ГЇГҐГ°ГҐГ¬ГҐГ­Г­ГіГѕ.");
 		}
 
 
 		generateAtom(std::make_unique<UnaryOpAtom>("MOV", q, r), scope);
 	}
 	else {
-		syntaxError("ожидалось присвоение или вызов функции");
+		syntaxError("Г®Г¦ГЁГ¤Г Г«Г®Г±Гј ГЇГ°ГЁГ±ГўГ®ГҐГ­ГЁГҐ ГЁГ«ГЁ ГўГ»Г§Г®Гў ГґГіГ­ГЄГ¶ГЁГЁ");
 	}
 }
 
@@ -612,7 +607,7 @@ int Translator::ArgList_(Scope scope) {
 			return n;
 		}
 		else {
-			syntaxError("Ожидался ещё параметр");
+			syntaxError("ГЋГ¦ГЁГ¤Г Г«Г±Гї ГҐГ№Вё ГЇГ Г°Г Г¬ГҐГІГ°");
 		}
 	}
 	return 0;
@@ -624,17 +619,17 @@ int Translator::ArgList_(Scope scope) {
 
 void Translator::IfOp(Scope scope) {
 	lexCheck();
-	if (_currentToken.type() != LexemType::kwif) syntaxError("Неизвестная ошибка в IF");
+	if (_currentToken.type() != LexemType::kwif) syntaxError("ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ  Гў IF");
 	_currentToken = _scanner.getNextToken();
 
 	lexCheck();
-	if (_currentToken.type() != LexemType::lpar) syntaxError("Ожидалась открывающая круглая скобка");
+	if (_currentToken.type() != LexemType::lpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г®ГІГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	auto p = E(scope);
 
 	lexCheck();
-	if (_currentToken.type() != LexemType::rpar) syntaxError("Ожидалась закрывающая круглая скобка");
+	if (_currentToken.type() != LexemType::rpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	auto l1 = newLabel();
@@ -663,7 +658,7 @@ void Translator::ElsePart(Scope scope) {
 
 void Translator::IOp(Scope scope) {
 	lexCheck();
-	if (_currentToken.type() != LexemType::kwin) syntaxError("Неизвестная ошибка в IN");
+	if (_currentToken.type() != LexemType::kwin) syntaxError("ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ  Гў IN");
 	_currentToken = _scanner.getNextToken();
 
 	lexCheck();
@@ -674,28 +669,28 @@ void Translator::IOp(Scope scope) {
 		auto p = _symbolTable.checkVar(scope, name);
 
 		if (p == nullptr)
-			syntaxError("Использование необъявленной переменной");
+			syntaxError("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Г­ГҐГ®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 
 		lexCheck();
-		if (_currentToken.type() != LexemType::semicolon) syntaxError("Ожидалась точка с запятой");
+		if (_currentToken.type() != LexemType::semicolon) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј ГІГ®Г·ГЄГ  Г± Г§Г ГЇГїГІГ®Г©");
 		_currentToken = _scanner.getNextToken();
 
 		generateAtom(std::make_unique<InAtom>(p), scope);
 	}
 	else {
-		syntaxError("Ожидался идентификатор");
+		syntaxError("ГЋГ¦ГЁГ¤Г Г«Г±Гї ГЁГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г°");
 	}
 }
 
 void Translator::OOp(Scope scope) {
 	lexCheck();
-	if (_currentToken.type() != LexemType::kwout) syntaxError("Неизвестная ошибка в OUT");
+	if (_currentToken.type() != LexemType::kwout) syntaxError("ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ  Гў OUT");
 	_currentToken = _scanner.getNextToken();
 
 	OOp_(scope);
 
 	lexCheck();
-	if (_currentToken.type() != LexemType::semicolon) syntaxError("Ожидалась точка с запятой");
+	if (_currentToken.type() != LexemType::semicolon) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј ГІГ®Г·ГЄГ  Г± Г§Г ГЇГїГІГ®Г©");
 	_currentToken = _scanner.getNextToken();
 }
 
@@ -715,19 +710,19 @@ void Translator::OOp_(Scope scope) {
 
 void Translator::WhileOp(Scope scope) {
 	lexCheck();
-	if (_currentToken.type() != LexemType::kwwhile) syntaxError("Наизвестная ошибка в WHILE");
+	if (_currentToken.type() != LexemType::kwwhile) syntaxError("ГЌГ ГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ  Гў WHILE");
 	_currentToken = _scanner.getNextToken();
 
 	auto l1 = newLabel();
 	generateAtom(std::make_unique<LabelAtom>(l1), scope);
 
 	lexCheck();
-	if (_currentToken.type() != LexemType::lpar) syntaxError("Ожидалась открывающая круглая скобка");
+	if (_currentToken.type() != LexemType::lpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г®ГІГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	auto p = E(scope);
 
-	if (_currentToken.type() != LexemType::rpar) syntaxError("Ожидалась закрывающая круглая скобка");
+	if (_currentToken.type() != LexemType::rpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	auto l2 = newLabel();
@@ -741,11 +736,11 @@ void Translator::WhileOp(Scope scope) {
 
 void Translator::ForOp(Scope scope) {
 	lexCheck();
-	if (_currentToken.type() != LexemType::kwfor) syntaxError("Неизвестная ошибка в FOR");
+	if (_currentToken.type() != LexemType::kwfor) syntaxError("ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ  Гў FOR");
 	_currentToken = _scanner.getNextToken();
 
 	lexCheck();
-	if (_currentToken.type() != LexemType::lpar) syntaxError("Ожидалась открывающая круглая скобка");
+	if (_currentToken.type() != LexemType::lpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г®ГІГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	ForInit(scope);
@@ -757,7 +752,7 @@ void Translator::ForOp(Scope scope) {
 	auto p = ForExpr(scope);
 
 	lexCheck();
-	if (_currentToken.type() != LexemType::semicolon) syntaxError("Ожидалась точка с запятой");
+	if (_currentToken.type() != LexemType::semicolon) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј ГІГ®Г·ГЄГ  Г± Г§Г ГЇГїГІГ®Г©");
 	_currentToken = _scanner.getNextToken();
 
 	auto l2 = newLabel();
@@ -773,7 +768,7 @@ void Translator::ForOp(Scope scope) {
 	generateAtom(std::make_unique<JumpAtom>(l1), scope);
 
 	lexCheck();
-	if (_currentToken.type() != LexemType::rpar) syntaxError("Ожидалась закрывающая круглая скобка");
+	if (_currentToken.type() != LexemType::rpar) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 
@@ -812,12 +807,12 @@ void Translator::ForLoop(Scope scope) {
 	else if (_currentToken.type() == LexemType::opinc) {
 		_currentToken = _scanner.getNextToken();
 
-		if (_currentToken.type() != LexemType::id) syntaxError("Ожидался идентификатор");
+		if (_currentToken.type() != LexemType::id) syntaxError("ГЋГ¦ГЁГ¤Г Г«Г±Гї ГЁГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г°");
 
 		auto p = _symbolTable.checkVar(scope, _currentToken.str());
 
 		if (p == nullptr)
-			syntaxError("Использование необъявленной переменной");
+			syntaxError("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ Г­ГҐГ®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©");
 
 		_currentToken = _scanner.getNextToken();
 
@@ -828,23 +823,23 @@ void Translator::ForLoop(Scope scope) {
 
 void Translator::SwitchOp(Scope scope) {
 	lexCheck();
-	if (_currentToken.type() != LexemType::kwswitch) syntaxError("Неизвестная ошибка в SWITCH");
+	if (_currentToken.type() != LexemType::kwswitch) syntaxError("ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г Гї Г®ГёГЁГЎГЄГ  Гў SWITCH");
 	_currentToken = _scanner.getNextToken();
 
 	lexCheck();
 	if (_currentToken.type() != LexemType::lpar)
-		syntaxError("Ожидалась открывающая круглая скобка");
+		syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г®ГІГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	auto p = E(scope);
 
 	lexCheck();
 	if (_currentToken.type() != LexemType::rpar)
-		syntaxError("Ожидалась закрывающая круглая скобка");
+		syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГЄГ°ГіГЈГ«Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	if (_currentToken.type() != LexemType::lbrace)
-		syntaxError("Ожидалась открывающая фигурная скобка");
+		syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г®ГІГЄГ°Г»ГўГ ГѕГ№Г Гї ГґГЁГЈГіГ°Г­Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	auto l1 = newLabel();
@@ -852,7 +847,7 @@ void Translator::SwitchOp(Scope scope) {
 	Cases(scope, p, l1);
 
 	if (_currentToken.type() != LexemType::rbrace)
-		syntaxError("Ожидалась закрывающая фигурная скобка");
+		syntaxError("ГЋГ¦ГЁГ¤Г Г«Г Г±Гј Г§Г ГЄГ°Г»ГўГ ГѕГ№Г Гї ГґГЁГЈГіГ°Г­Г Гї Г±ГЄГ®ГЎГЄГ ");
 	_currentToken = _scanner.getNextToken();
 
 	generateAtom(std::make_unique<LabelAtom>(l1), scope);
@@ -867,7 +862,7 @@ void Translator::Cases(Scope scope, std::shared_ptr<RValue> p, std::shared_ptr<L
 		Cases_(scope, p, end, def1);
 	}
 	else {
-		syntaxError("Ожидался CASE или DEFAULT");
+		syntaxError("ГЋГ¦ГЁГ¤Г Г«Г±Гї CASE ГЁГ«ГЁ DEFAULT");
 	}
 }
 
@@ -880,7 +875,7 @@ std::shared_ptr<LabelOperand> Translator::ACase(Scope scope, std::shared_ptr<RVa
 
 		lexCheck();
 		if (_currentToken.type() != LexemType::num)
-			syntaxError("Ожидался NUM");
+			syntaxError("ГЋГ¦ГЁГ¤Г Г«Г±Гї NUM");
 		
 		int val = _currentToken.value();
 		auto v = std::make_shared<NumberOperand>(val);
@@ -892,7 +887,7 @@ std::shared_ptr<LabelOperand> Translator::ACase(Scope scope, std::shared_ptr<RVa
 
 		lexCheck();
 		if (_currentToken.type() != LexemType::colon)
-			syntaxError("Ожидалось Двоеточие");
+			syntaxError("ГЋГ¦ГЁГ¤Г Г«Г®Г±Гј Г„ГўГ®ГҐГІГ®Г·ГЁГҐ");
 		_currentToken = _scanner.getNextToken();
 
 		StmtList(scope);
@@ -911,7 +906,7 @@ std::shared_ptr<LabelOperand> Translator::ACase(Scope scope, std::shared_ptr<RVa
 		auto def = newLabel();
 		lexCheck();
 		if (_currentToken.type() != LexemType::colon)
-			syntaxError("Ожидалось Двоеточие");
+			syntaxError("ГЋГ¦ГЁГ¤Г Г«Г®Г±Гј Г„ГўГ®ГҐГІГ®Г·ГЁГҐ");
 		_currentToken = _scanner.getNextToken();
 
 
@@ -1101,7 +1096,7 @@ void Translator::generateCode(std::ostream& stream) {
 	}
 
 	if (!flag_main) {
-		syntaxError("Не найдено функции main()");
+		syntaxError("ГЌГҐ Г­Г Г©Г¤ГҐГ­Г® ГґГіГ­ГЄГ¶ГЁГЁ main()");
 	}
 
 	stream << '\t' << "ORG 8000H;" << '\n';
