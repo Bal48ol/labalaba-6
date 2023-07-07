@@ -1,8 +1,3 @@
-/*
-	Copyright © 2022 TverSU. All rights reserved.
-	Author: Ischenko Andrey
-*/
-
 #include "Scanner.h"
 
 bool is_Letter(char& c) {
@@ -19,47 +14,47 @@ bool is_Letter(char& c) {
 
 
 Token Scanner::getNextToken() {
-	// Åñëè àâòîìàò îñòàíîâëåí, òî âåðíóòü eof
+	// Ã…Ã±Ã«Ã¨ Ã Ã¢Ã²Ã®Ã¬Ã Ã² Ã®Ã±Ã²Ã Ã­Ã®Ã¢Ã«Ã¥Ã­, Ã²Ã® Ã¢Ã¥Ã°Ã­Ã³Ã²Ã¼ eof
 	if (this->is_stopped) {
 		return Token(LexemType::eof);
 	}
 
-	// Òåêóùèé ñèìâîë
+	// Ã’Ã¥ÃªÃ³Ã¹Ã¨Ã© Ã±Ã¨Ã¬Ã¢Ã®Ã«
 	char currentChar;
-	// Çíà÷åíèå
+	// Ã‡Ã­Ã Ã·Ã¥Ã­Ã¨Ã¥
 	std::string value;
 
-	// Ñáðîñ ñîñòîÿíèÿ â íîëü
+	// Ã‘Ã¡Ã°Ã®Ã± Ã±Ã®Ã±Ã²Ã®Ã¿Ã­Ã¨Ã¿ Ã¢ Ã­Ã®Ã«Ã¼
 	State = 0;
 
 
 	while (true)
 	{	
-		// Åñëè åñòü âîçâðàù¸ííûé ñèìâîë, òî âûáåðåì åãî
+		// Ã…Ã±Ã«Ã¨ Ã¥Ã±Ã²Ã¼ Ã¢Ã®Ã§Ã¢Ã°Ã Ã¹Â¸Ã­Ã­Ã»Ã© Ã±Ã¨Ã¬Ã¢Ã®Ã«, Ã²Ã® Ã¢Ã»Ã¡Ã¥Ã°Ã¥Ã¬ Ã¥Ã£Ã®
 		if (is_returned) {
 			currentChar = returnedChar;
 			is_returned = false;
 		}
 
-		// Èíà÷å, åñëè âõîä íåïóñòîé, âîçüì¸ì ñèìâîë îòòóäà
+		// ÃˆÃ­Ã Ã·Ã¥, Ã¥Ã±Ã«Ã¨ Ã¢ÃµÃ®Ã¤ Ã­Ã¥Ã¯Ã³Ã±Ã²Ã®Ã©, Ã¢Ã®Ã§Ã¼Ã¬Â¸Ã¬ Ã±Ã¨Ã¬Ã¢Ã®Ã« Ã®Ã²Ã²Ã³Ã¤Ã 
 		else if (!input_stream.eof()) {
 			currentChar = input_stream.get();
 			
-			// Åñëè ýòî áûë êîíåö ôàéëà, òî îáðàòîòàåì ïàðó ñëó÷àåâ è ïðîéä¸ì ïî àâòîìàòó ñ ñèìâîëîì ïðîáåëà,
-			// ÷òîá âûâåñòè íåçàâåðøèâøèåñÿ ÷èñëà, ëèòåðàëû è êëþ÷åâûå ñëîâà
+			// Ã…Ã±Ã«Ã¨ Ã½Ã²Ã® Ã¡Ã»Ã« ÃªÃ®Ã­Ã¥Ã¶ Ã´Ã Ã©Ã«Ã , Ã²Ã® Ã®Ã¡Ã°Ã Ã²Ã®Ã²Ã Ã¥Ã¬ Ã¯Ã Ã°Ã³ Ã±Ã«Ã³Ã·Ã Ã¥Ã¢ Ã¨ Ã¯Ã°Ã®Ã©Ã¤Â¸Ã¬ Ã¯Ã® Ã Ã¢Ã²Ã®Ã¬Ã Ã²Ã³ Ã± Ã±Ã¨Ã¬Ã¢Ã®Ã«Ã®Ã¬ Ã¯Ã°Ã®Ã¡Ã¥Ã«Ã ,
+			// Ã·Ã²Ã®Ã¡ Ã¢Ã»Ã¢Ã¥Ã±Ã²Ã¨ Ã­Ã¥Ã§Ã Ã¢Ã¥Ã°Ã¸Ã¨Ã¢Ã¸Ã¨Ã¥Ã±Ã¿ Ã·Ã¨Ã±Ã«Ã , Ã«Ã¨Ã²Ã¥Ã°Ã Ã«Ã» Ã¨ ÃªÃ«Ã¾Ã·Ã¥Ã¢Ã»Ã¥ Ã±Ã«Ã®Ã¢Ã 
 			if (input_stream.eof()) {
 				this->is_stopped = true;
 
-				// Îáðàáîòàåì îòäåëüíûå ñëó÷àè
+				// ÃŽÃ¡Ã°Ã Ã¡Ã®Ã²Ã Ã¥Ã¬ Ã®Ã²Ã¤Ã¥Ã«Ã¼Ã­Ã»Ã¥ Ã±Ã«Ã³Ã·Ã Ã¨
 				if (State == 2)
-					return Token(LexemType::error, "Íåçàêðûòàÿ ñèìâîëüíàÿ êîíñòàíòà");
+					return Token(LexemType::error, "ÃÃ¥Ã§Ã ÃªÃ°Ã»Ã²Ã Ã¿ Ã±Ã¨Ã¬Ã¢Ã®Ã«Ã¼Ã­Ã Ã¿ ÃªÃ®Ã­Ã±Ã²Ã Ã­Ã²Ã ");
 				if (State == 4)
-					return Token(LexemType::error, "Íåçàêðûòàÿ ñòðîêîâàÿ êîíñòàíòà");
+					return Token(LexemType::error, "ÃÃ¥Ã§Ã ÃªÃ°Ã»Ã²Ã Ã¿ Ã±Ã²Ã°Ã®ÃªÃ®Ã¢Ã Ã¿ ÃªÃ®Ã­Ã±Ã²Ã Ã­Ã²Ã ");
 
 				currentChar = ' ';
 			}
 		}
-		// Èíà÷å çàâåðøèòü
+		// ÃˆÃ­Ã Ã·Ã¥ Ã§Ã Ã¢Ã¥Ã°Ã¸Ã¨Ã²Ã¼
 		else {
 			this->is_stopped = true;
 			return Token(LexemType::eof);
@@ -130,13 +125,13 @@ Token Scanner::getNextToken() {
 					continue;
 				}
 
-				return Token(LexemType::error, "Íåïîääåðæèâàåìûé ÿçûêîì ñèìâîë");
+				return Token(LexemType::error, "ÃÃ¥Ã¯Ã®Ã¤Ã¤Ã¥Ã°Ã¦Ã¨Ã¢Ã Ã¥Ã¬Ã»Ã© Ã¿Ã§Ã»ÃªÃ®Ã¬ Ã±Ã¨Ã¬Ã¢Ã®Ã«");
 
 
 				break;
 
 			case 1:
-				// Îáðàáîòêà ÷èñåë
+				// ÃŽÃ¡Ã°Ã Ã¡Ã®Ã²ÃªÃ  Ã·Ã¨Ã±Ã¥Ã«
 				if ((currentChar - '0') >= 0 && (currentChar - '0') <= 9)
 					value += currentChar;
 				else {
@@ -149,10 +144,10 @@ Token Scanner::getNextToken() {
 				break;
 
 			case 2:
-				// Òèï char
+				// Ã’Ã¨Ã¯ char
 				if (currentChar == '\'') {
 					is_stopped = true;
-					return Token(LexemType::error, "Ïóñòàÿ ñèìâîëüíàÿ êîíñòàíòà");
+					return Token(LexemType::error, "ÃÃ³Ã±Ã²Ã Ã¿ Ã±Ã¨Ã¬Ã¢Ã®Ã«Ã¼Ã­Ã Ã¿ ÃªÃ®Ã­Ã±Ã²Ã Ã­Ã²Ã ");
 				}
 				State = 3;
 				value = currentChar;
@@ -164,12 +159,12 @@ Token Scanner::getNextToken() {
 					return Token(value[0]);
 				}
 				is_stopped = true;
-				return Token(LexemType::error, "Ñèìâîëüíàÿ êîíñòàíòà, ñîäåðæàùàÿ áîëåå îäíîãî ñèìâîëà");
+				return Token(LexemType::error, "Ã‘Ã¨Ã¬Ã¢Ã®Ã«Ã¼Ã­Ã Ã¿ ÃªÃ®Ã­Ã±Ã²Ã Ã­Ã²Ã , Ã±Ã®Ã¤Ã¥Ã°Ã¦Ã Ã¹Ã Ã¿ Ã¡Ã®Ã«Ã¥Ã¥ Ã®Ã¤Ã­Ã®Ã£Ã® Ã±Ã¨Ã¬Ã¢Ã®Ã«Ã ");
 
 				break;
 
 			case 4:
-				// Òèï String
+				// Ã’Ã¨Ã¯ String
 				if (currentChar == '"') {
 					State = 0;
 					return Token(LexemType::str, value);
@@ -180,7 +175,7 @@ Token Scanner::getNextToken() {
 				break;
 
 			case 5:
-				// Êëþ÷åâûå ñëîâà è èìåíà ïåðåìåííûõ è ôóíêöèé
+				// ÃŠÃ«Ã¾Ã·Ã¥Ã¢Ã»Ã¥ Ã±Ã«Ã®Ã¢Ã  Ã¨ Ã¨Ã¬Ã¥Ã­Ã  Ã¯Ã¥Ã°Ã¥Ã¬Ã¥Ã­Ã­Ã»Ãµ Ã¨ Ã´Ã³Ã­ÃªÃ¶Ã¨Ã©
 				if (is_Letter(currentChar) || ((currentChar >= '0' && currentChar <= '9')))
 					value += currentChar;
 				else {
@@ -197,7 +192,7 @@ Token Scanner::getNextToken() {
 				break;
 
 			case 6:
-				// Îáðàáîòêà ìèíóñà
+				// ÃŽÃ¡Ã°Ã Ã¡Ã®Ã²ÃªÃ  Ã¬Ã¨Ã­Ã³Ã±Ã 
 				if (currentChar == '-') {
 					State = 0;
 					return Token(LexemType::opdec);
@@ -274,7 +269,7 @@ Token Scanner::getNextToken() {
 				}
 				else {
 					is_stopped = true;
-					return Token(LexemType::error, "Îäèíî÷íûé ñèìâîë |");
+					return Token(LexemType::error, "ÃŽÃ¤Ã¨Ã­Ã®Ã·Ã­Ã»Ã© Ã±Ã¨Ã¬Ã¢Ã®Ã« |");
 				}
 
 				break;
@@ -286,7 +281,7 @@ Token Scanner::getNextToken() {
 				}
 				else {
 					is_stopped = true;
-					return Token(LexemType::error, "Îäèíî÷íûé ñèìâîë &");
+					return Token(LexemType::error, "ÃŽÃ¤Ã¨Ã­Ã®Ã·Ã­Ã»Ã© Ã±Ã¨Ã¬Ã¢Ã®Ã« &");
 				}
 
 				break;
