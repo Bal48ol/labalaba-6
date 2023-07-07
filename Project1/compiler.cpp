@@ -1,8 +1,3 @@
-/*
-	Copyright © 2022 TverSU. All rights reserved.
-	Author: Ischenko Andrey
-*/
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -25,7 +20,7 @@ int main() {
 
 	std::string file_name = "ex6_var2_test.minic";
 
-	std::cout << "Âû ââåëè: \n";
+	std::cout << "Ã‚Ã» Ã¢Ã¢Ã¥Ã«Ã¨: \n";
 	std::ifstream ifs(file_name);
 	while (ifs) {
 		std::string s;
@@ -45,7 +40,7 @@ int main() {
 		else
 			throw std::exception("SyntaxError");
 
-		std::cout << "\n==  Àòîìû  ==\n";
+		std::cout << "\n==  Ã€Ã²Ã®Ã¬Ã»  ==\n";
 		myTranslator.printAtoms(std::cout);
 
 		std::cout << "\n\n\n== ASM 8080 code==\n\n\n";
